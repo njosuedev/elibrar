@@ -4,7 +4,7 @@ module.exports = (sequelize, Datatype) => {
             type: Datatype.STRING,
             allowNull: false,
         },
-        PostText: {
+        postText: {
             type: Datatype.STRING,
             allowNull: false,
         },
