@@ -1,9 +1,13 @@
 import { Field, Formik, Form, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 import axios from "axios";
+import { useState } from "react";
+
 
 
 function Create() {
+    const [selectedFile, setSelectedFile] = useState(null); // state for image
+
     const header = {
         textAlign: "center",
         color: "blue",
@@ -49,6 +53,7 @@ function Create() {
         color: "red"
     }
 
+
     const initialValues = {
         title: "",
         postText: "",
@@ -56,10 +61,19 @@ function Create() {
     }
 
     const onSubmit = (data) => {
-        axios.post("http://localhost:3001/posts", data).then((response) => {
-            console.log("IT WORKS");
-        });
-    }
+        const formData = new FormData();
+        formData.append("title", data.title);
+        formData.append("postText", data.postText);
+        formData.append("username", data.username);
+        if (selectedFile) formData.append("image", selectedFile);
+
+        axios
+            .post("http://localhost:3001/posts", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            })
+            .then((response) => console.log("Post created with image!"))
+            .catch((err) => console.error(err));
+    };
 
     const validationSchema = Yup.object().shape({
         title: Yup.string()
@@ -109,6 +123,22 @@ function Create() {
                         id="inputCreate"
                         name="username"
                     />
+
+                    <label>Upload Image: </label>
+                    <ErrorMessage style={span} name="image" component="span" />
+                    <Field name="image">
+                        {({ field, form }) => (
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(event) => {
+                                    form.setFieldValue("image", event.currentTarget.files[0]);
+                                    setSelectedFile(event.currentTarget.files[0]);
+                                }}
+                            />
+                        )}
+                    </Field>
+
 
                     <button style={submitBtn} type="submit">
                         Create post

@@ -14,7 +14,7 @@ function Home() {
     padding: "10px",
     background: "#fdfcfcff",
     border: "0.5px solid #e4e3e3ff",
-    width: "30vw",
+    width: "40vw",
     justifySelf: "center",
     marginTop: "5px",
     borderRadius: "8px",
@@ -26,12 +26,39 @@ function Home() {
   };
 
   const textStyle = {
-    paddingLeft: "9px"
-  }
+    paddingLeft: "9px",
+  };
 
   const usernameStyle = {
     color: "blue",
     fontSize: "0.9rem",
+  };
+
+  const imageStyle = {
+    width: "100%",
+    height: "auto",
+    marginTop: "10px",
+    borderRadius: "5px",
+  };
+
+  // Friendly "time ago" function
+  const timeAgo = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = now - date; // milliseconds
+
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (seconds < 60) return "Now";
+    if (minutes < 60) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+    if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+    if (days < 7) return `${days} day${days > 1 ? "s" : ""} ago`;
+
+    // Older than a week → show weekday
+    return date.toLocaleDateString("en-US", { weekday: "short" }); // Mon, Tue, etc.
   };
 
   return (
@@ -40,7 +67,14 @@ function Home() {
         <div key={index} style={postStyle}>
           <h3 style={titleStyle}>{post.title}</h3>
           <p style={textStyle}>{post.postText}</p>
-          <p>{post.createdAt}</p>
+          {post.image && (
+            <img
+              src={`http://localhost:3001${post.image}`}
+              alt={post.title}
+              style={imageStyle}
+            />
+          )}
+          <p>{timeAgo(post.createdAt)}</p>
           <small style={usernameStyle}>{post.username}</small>
         </div>
       ))}

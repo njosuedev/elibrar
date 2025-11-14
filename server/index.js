@@ -1,9 +1,13 @@
 const express = require('express');
+const multer = require("multer");
 const cors  = require("cors")
 const app = express();
+
 app.use(express.json());
 app.use(cors())
+app.use("/uploads", express.static("uploads"));
 
+// use model
 const db = require("./models")
 // Routers
 
