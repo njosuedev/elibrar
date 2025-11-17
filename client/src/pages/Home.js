@@ -14,7 +14,7 @@ function Home() {
     padding: "10px",
     background: "#fdfcfcff",
     border: "0.5px solid #e4e3e3ff",
-    width: "24vw",
+    width: "35vw",
     justifySelf: "center",
     marginTop: "5px",
     borderRadius: "8px",
